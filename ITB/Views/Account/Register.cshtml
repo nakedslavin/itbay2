@@ -1,0 +1,70 @@
+﻿@model ITB.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3 top_120">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#contractor">Contractor</a></li>
+            <li><a data-toggle="tab" href="#client">Client</a></li>
+        </ul>
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+        <div class="tab-content login-panel-content">
+            <div id="contractor" class="tab-pane active panel panel-warning">
+                <div class="panel-body">You are registering as a Contractor. Will take a couple of minutes.</div>
+            </div>
+            <div id="client" class="tab-pane panel panel-warning">
+                <div class="panel-body">You are registering as a Client. Will take a couple of minutes.</div>
+            </div>
+            @Html.Hidden("type", "contractor")
+        </div>
+        <div id="content">
+
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default" value="Proceed with the Registration" />
+                    </div>
+                </div>
+                <p class="text-center top_120">
+                    @Html.ActionLink("Login if you have an account", "Login")
+                </p>
+          </div>
+        }
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('.nav-tabs a').on('shown.bs.tab', function (e) {
+                var current_tab = e.target.innerText || "contractor";
+                console.log(current_tab);
+                $("input[name=type]").val(current_tab.toLowerCase());
+            });
+        });
+    </script>
+}

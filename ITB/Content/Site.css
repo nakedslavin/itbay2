@@ -1,0 +1,37 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    overflow-x:hidden;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* TOPS */
+.top_30 {
+    margin-top: 30px
+}
+.top_60 {
+    margin-top: 60px
+}
+.top_120 {
+    margin-top:120px
+}
+/* LOGIN */
+.login-panel-content {
+    padding-top: 20px
+}
+    .login-panel-content .checkbox {
+        margin-left: 20px;
+    }
+/* REGISTER */

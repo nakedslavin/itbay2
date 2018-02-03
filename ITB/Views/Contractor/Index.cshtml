@@ -1,0 +1,269 @@
+﻿@using ITB.Business
+@model Contractor
+@{
+    ViewBag.Title = "Contractor";
+}
+
+<div id="app_contractor" class="row">
+    <div class="col-md-6 top_120">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{{title}}</a></li>
+        </ul>
+        <div class="top_30">
+            <form v-on:submit="submit">
+                <div class="">
+                    <div class="col-xs-3">
+                        <img src="https://source.unsplash.com/user/erondu/100x100" class="img-rounded img-responsive" />
+                    </div>
+                    <div class="col-xs-9">
+                        <div class="form-group">
+                            <input type="text" name="FirstName" v-model="contractor.FirstName" class="form-control" placeholder="First Name" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="LastName" v-model="contractor.LastName" class="form-control" placeholder="Last Name" />
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="form-group">
+                    <input type="text" name="Email" v-model="contractor.Email" class="form-control" placeholder="Email" disabled />
+                </div>
+                <div class="form-group hidden">
+                    <input type="text" name="UserName" v-model="contractor.UserName" class="form-control" placeholder="UserName" disabled />
+                </div>
+                <hr />
+                <div class="form-group">
+                    <input type="text" name="GithubUrl" v-model="contractor.GithubUrl" class="form-control" placeholder="GithubUrl"  />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="WebsiteUrl" v-model="contractor.WebsiteUrl" class="form-control" placeholder="WebsiteUrl"  />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="StackoverflowUrl" v-model="contractor.StackoverflowUrl" class="form-control" placeholder="StackoverflowUrl"  />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="LinkedinUrl" v-model="contractor.LinkedinUrl" class="form-control" placeholder="LinkedinUrl"  />
+                </div>
+                <hr />
+                <div class="form-group">
+                    <input type="text" name="SelectedPositionType" v-model="contractor.SelectedPositionType" class="form-control" placeholder="SelectedPositionType"  />
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(m => m.ContractType, 
+                        new SelectList(Enum.GetValues(typeof(ContractType))),
+                        new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Preferred Locations:</label>
+                    <input class="tagsinput" data-role="tagsinput" value="@string.Join(",", Model.SelectedCities)" data-set="tags" />
+                </div>
+                <div class="form-group">
+                    <label>Primary Skills:</label>
+                    <input class="tagsinput" data-role="tagsinput" value="@string.Join(",", Model.PrimarySkills)" data-set="pskills" />
+                </div>
+                <div class="form-group">
+                    <label>Secondary Skills:</label>
+                    <input class="tagsinput" data-role="tagsinput" value="@string.Join(",", Model.SecondarySkills)" data-set="sskills" />
+                </div>
+                <div class="form-group">
+                    <label>Languages:</label>
+                    <input class="tagsinput" data-role="tagsinput" value="@string.Join(",", Model.Languages)" data-set="languages" />
+                </div>
+                <div class="form-group">
+                    <button id="update" type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6 top_120">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{{expTitle}}</a></li>
+        </ul>
+        <div class="top_30">
+            <div v-for="(exp,index) in contractor.Experiences" class="form-group">
+                <a href="#" v-on:click="removeExp(index)" class="pull-right"><span class="fui-cross"></span></a>
+                <strong class="">{{exp.CompanyName}}</strong>
+                <small>{{exp.JobTitle}}</small><br />
+                <small v-if="exp.CurrentlyWorkHere">Currently Working Here</small><br />
+                <small>{{exp.Description}}</small>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group"><input type="text" name="CompanyName" id="CompanyName" class="form-control input-sm" placeholder="Company Name" /></div>
+                    <div class="form-group"><input type="text" name="JobTitle" id="JobTitle" class="form-control input-sm" placeholder="Job Title" /></div>
+                    <div class="form-group"><input type="text" name="Description" id="Description" class="form-control input-sm" placeholder="Description" /></div>
+                    <label class="checkbox">
+                        <input type="checkbox" checked="checked" data-toggle="checkbox" name="CurrentlyWorkHere" id="CurrentlyWorkHere" class="custom-checkbox">
+                        <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>Currently Work Here
+                    </label>
+
+                    <input v-on:click="addExp" type="button" value="Add more experiences" class="btn btn-sm" />
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{{eduTitle}}</a></li>
+        </ul>
+        <div class="top_30">
+            <div v-for="(edu,index) in contractor.Educations" class="form-group">
+                <a href="#" v-on:click="removeEdu(index)" class="pull-right"><span class="fui-cross"></span></a>
+                <strong class="">{{edu.Institution}}</strong>
+                <small>{{edu.GraduationResult}}</small>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group"><input type="text" name="Institution" id="Institution" class="form-control input-sm" placeholder="Institution" /></div>
+                    <div class="form-group"><input type="text" name="GraduationResult" id="GraduationResult" class="form-control input-sm" placeholder="GraduationResult" /></div>
+
+                    <input v-on:click="addEdu" type="button" value="Add other education" class="btn btn-sm" />
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{{certTitle}}</a></li>
+        </ul>
+        <div class="top_30">
+            <div v-for="(cert,index) in contractor.Certificates" class="form-group">
+                <a href="#" v-on:click="removeCert(index)" class="pull-right"><span class="fui-cross"></span></a>
+                <strong class="">{{cert.Name}}</strong>
+                <small>{{cert.CertDocument}}</small>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group"><input type="text" name="Name" id="Name" class="form-control input-sm" placeholder="Name" /></div>
+                    <div class="form-group"><input type="text" name="CertDocument" id="CertDocument" class="form-control input-sm" placeholder="Cert Document" /></div>
+
+                    <input v-on:click="addCert" type="button" value="Add additional certificates" class="btn btn-sm" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var contractorApp = new Vue({
+            el: '#app_contractor',
+            data: {
+                dataGetURL: "/Contractor/Get",
+                dataPostURL: "/Contractor/Post",
+                title: "About",
+                expTitle: "Experience",
+                eduTitle: "Education",
+                certTitle: "Certifications",
+                contractor: {
+                }
+            },
+            computed: {
+                tags: {
+                    get() {
+                        return (this.contractor.SelectedCities || []).join(',');
+                    },
+                    set(newValue) {
+                        this.contractor.SelectedCities = newValue.split(',');
+                    }
+                },
+                pskills: {
+                    get() {
+                        return (this.contractor.PrimarySkills || []).join(',');
+                    },
+                    set(newValue) {
+                        this.contractor.PrimarySkills = newValue.split(',');
+                    }
+                },
+                sskills: {
+                    get() {
+                        return (this.contractor.SecondarySkills || []).join(',');
+                    },
+                    set(newValue) {
+                        this.contractor.SecondarySkills = newValue.split(',');
+                    }
+                },
+                languages: {
+                    get() {
+                        return (this.contractor.Languages || []).join(',');
+                    },
+                    set(newValue) {
+                        this.contractor.Languages = newValue.split(',');
+                    }
+                }
+            },
+            methods: {
+                addExp(src) {
+                    var parent = $(src.target).parent("div");
+                    var obj = {
+                        CompanyName: parent.find("input[name=CompanyName]").val(),
+                        JobTitle: parent.find("input[name=JobTitle]").val(),
+                        Description: parent.find("input[name=Description]").val(),
+                        CurrentlyWorkHere: parent.find("input[name=CurrentlyWorkHere]").is(':checked')
+                    }
+                    parent.find('input[type=text]').val('');
+                    this.contractor.Experiences.push(obj);
+                    this.submit();
+                },
+                addEdu(src) {
+                    var parent = $(src.target).parent("div");
+                    var obj = {
+                        Institution: parent.find("input[name=Institution]").val(),
+                        GraduationResult: parent.find("input[name=GraduationResult]").val()
+                    }
+                    parent.find('input[type=text]').val('');
+                    this.contractor.Educations.push(obj);
+                    this.submit();
+                },
+                addCert(src) {
+                    var parent = $(src.target).parent("div");
+                    var obj = {
+                        Name: parent.find("input[name=Name]").val(),
+                        CertDocument: parent.find("input[name=CertDocument]").val()
+                    }
+                    parent.find('input[type=text]').val('');
+                    this.contractor.Certificates.push(obj);
+                    this.submit();
+                },
+                removeExp(key) {
+                    this.contractor.Experiences.splice(key, 1);
+                    this.submit();
+                },
+                removeEdu(key) {
+                    this.contractor.Educations.splice(key, 1);
+                    this.submit();
+                },
+                removeCert(key) {
+                    this.contractor.Certificates.splice(key, 1);
+                    this.submit();
+                },
+                submit(event) {
+                    if (event !== undefined)
+                        event.preventDefault();
+                    var self = this;
+                    var button = $(this.$el).find("button#update");
+                    button.text("Saving");
+                    $.post(this.dataPostURL, this.contractor).fail(function () {
+                        $(self.$el).find("form").validate();
+                    }).always(function () {
+                        button.text("Update"); });
+                },
+                tagsChanged() {
+                    console.log("change");
+                }
+            },
+            created() {
+                var self = this;
+                $.getJSON(this.dataGetURL, function (data) {
+                    self.contractor = data;
+                });
+            },
+            mounted() {
+                var self = this;
+                var tags = $(this.$el).find(".tagsinput");
+                tags.on('itemAdded', function (event) { self.tagsChanged(); });
+                tags.on('itemRemoved', function (event) { self.tagsChanged(); });
+        })
+    </script>
+}
