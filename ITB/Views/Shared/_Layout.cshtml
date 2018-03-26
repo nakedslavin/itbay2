@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using ITB.Business
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,16 +27,19 @@
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Profile", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Dashboard", "Index", "Profile")</li>
-                        <li>@Html.ActionLink("Projects", "Index", "Profile")</li>
-                        <li>@Html.ActionLink("Projects", "Index", "Profile")</li>
+                        <li>@Html.ActionLink("Dashboard", "Dashboard", "Home")</li>
+                        if (User.IsInRole(EntityRole.Client.ToString().ToLower()))
+                        {
+                            <li>@Html.ActionLink("Projects", "Project", "Client")</li>
+                            <li>@Html.ActionLink("Positions", "Project", "Client")</li>
+                        }
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="row" style="height:120px; background-image:url('/Content/high-tech-abstract-wallpaper-30896-31626-hd-wallpapers.jpg')">
+    <div class="row" style="height:120px; background-image:url('http://erkconsult.com/content/img/slides/slide3.jpg')">
     </div>
     <div class="container body-content">
         @RenderBody()
@@ -49,6 +53,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     <script src="https://unpkg.com/vue"></script>
     <script src="http://designmodo.github.io/Flat-UI/dist/js/flat-ui.min.js"></script>
+    <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

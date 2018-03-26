@@ -18,12 +18,16 @@ namespace ITB.Controllers
         {
             var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
             var roleManager = new RoleManager<IdentityRole>(roleStore);
-
-            string action = "Index";
             
             if (User.IsInRole(EntityRole.Contractor.ToString().ToLower()))
-                return RedirectToAction(action, "Contractor");
-            return RedirectToAction(action, "Client");
+                return RedirectToAction(nameof(Index), EntityRole.Contractor.ToString());
+            return RedirectToAction(nameof(Index), EntityRole.Client.ToString());
+        }
+
+        public ActionResult Dashboard() {
+            if (User.IsInRole(EntityRole.Contractor.ToString().ToLower()))
+                return RedirectToAction(nameof(Dashboard), EntityRole.Contractor.ToString());
+            return RedirectToAction(nameof(Dashboard), EntityRole.Client.ToString());
         }
 
         public ActionResult About()

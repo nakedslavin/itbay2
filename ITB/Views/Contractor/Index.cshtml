@@ -5,15 +5,19 @@
 }
 
 <div id="app_contractor" class="row">
-    <div class="col-md-6 top_120">
+    <div class="col-md-6 top_60">
+        <!-- Square switch -->
+        <div class="bootstrap-switch-square pull-right">
+            <span class="right_20"><span v-if="isActive">I'm Available</span><span v-if="!isActive">I'm Not Available</span></span><input type="checkbox" checked data-toggle="switch" name="square-switch" v-model="isActive" />
+        </div>
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">{{title}}</a></li>
         </ul>
         <div class="top_30">
             <form v-on:submit="submit">
-                <div class="">
+                <div class="row">
                     <div class="col-xs-3">
-                        <img src="https://source.unsplash.com/user/erondu/100x100" class="img-rounded img-responsive" />
+                        <img src="https://source.unsplash.com/user/erondu/100x100" class="img-rounded img-responsive img-margin-left" />
                     </div>
                     <div class="col-xs-9">
                         <div class="form-group">
@@ -24,8 +28,6 @@
                         </div>
                     </div>
                 </div>
-                
-                
                 <div class="form-group">
                     <input type="text" name="Email" v-model="contractor.Email" class="form-control" placeholder="Email" disabled />
                 </div>
@@ -47,7 +49,7 @@
                 </div>
                 <hr />
                 <div class="form-group">
-                    <input type="text" name="SelectedPositionType" v-model="contractor.SelectedPositionType" class="form-control" placeholder="SelectedPositionType"  />
+                    <input type="text" name="SelectedPosition" v-model="contractor.SelectedPosition" class="form-control" style="position:inherit!important" placeholder="Position"  />
                 </div>
                 <div class="form-group">
                     @Html.DropDownListFor(m => m.ContractType, 
@@ -76,11 +78,11 @@
             </form>
         </div>
     </div>
-    <div class="col-md-6 top_120">
+    <div class="col-md-6 top_60">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#">{{expTitle}}</a></li>
+            <li class="active"><a href="#">{{expTitle}}</a>
         </ul>
-        <div class="top_30">
+        <div class="panel-body">
             <div v-for="(exp,index) in contractor.Experiences" class="form-group">
                 <a href="#" v-on:click="removeExp(index)" class="pull-right"><span class="fui-cross"></span></a>
                 <strong class="">{{exp.CompanyName}}</strong>
@@ -106,7 +108,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">{{eduTitle}}</a></li>
         </ul>
-        <div class="top_30">
+        <div class="panel-body">
             <div v-for="(edu,index) in contractor.Educations" class="form-group">
                 <a href="#" v-on:click="removeEdu(index)" class="pull-right"><span class="fui-cross"></span></a>
                 <strong class="">{{edu.Institution}}</strong>
@@ -125,7 +127,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">{{certTitle}}</a></li>
         </ul>
-        <div class="top_30">
+        <div class="panel-body">
             <div v-for="(cert,index) in contractor.Certificates" class="form-group">
                 <a href="#" v-on:click="removeCert(index)" class="pull-right"><span class="fui-cross"></span></a>
                 <strong class="">{{cert.Name}}</strong>
@@ -156,6 +158,7 @@
                 expTitle: "Experience",
                 eduTitle: "Education",
                 certTitle: "Certifications",
+                isActive: true,
                 contractor: {
                 }
             },
@@ -250,7 +253,33 @@
                         button.text("Update"); });
                 },
                 tagsChanged() {
-                    console.log("change");
+                    var self = this;
+                    $(this.$el).find(".tagsinput").each(function () {
+                        var values = $(this).val();
+                        var element = $(this).data("set");
+                        switch (element) {
+                            case "sskills":
+                                self.sskills = values;
+                                break;
+                            case "pskills":
+                                self.pskills = values;
+                                break;
+                            case "languages":
+                                self.languages = values;
+                                break;
+                            case "tags":
+                                self.tags = values;
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                },
+                 selectedContractChanged() {
+                    var el = $(this.$el);
+                    var selectedContractType = el.find("#ContractType :selected").text();
+                    this.contractor.ContractType = selectedContractType;
+                    this.submit();
                 }
             },
             created() {
@@ -261,9 +290,81 @@
             },
             mounted() {
                 var self = this;
-                var tags = $(this.$el).find(".tagsinput");
+                var el = $(this.$el);
+                var tags = el.find(".tagsinput");
                 tags.on('itemAdded', function (event) { self.tagsChanged(); });
                 tags.on('itemRemoved', function (event) { self.tagsChanged(); });
+
+                var citynames = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: {
+                        url: '/Service/Locations'
+                    }
+                });
+                citynames.initialize();
+                var skills = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: {
+                        url: '/Service/Skills'
+                    }
+                });
+                skills.initialize();
+                var positions = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: {
+                        url: '/Service/Positions'
+                    }
+                });
+                positions.initialize();
+
+                tags.each(function () {
+                    var element = $(this).data("set");
+                    switch (element) {
+                        case "sskills":
+                            $(this).tagsinput({
+                                typeaheadjs: {
+                                    source: skills, name: "skills"
+                                }
+                            });
+                            break;
+                        case "pskills":
+                            $(this).tagsinput({
+                                typeaheadjs: {
+                                    source: skills, name: "skills"
+                                }
+                            });
+                            break;
+                        case "languages":
+                            break;
+                        case "tags":
+                            $(this).tagsinput({
+                                typeaheadjs: {
+                                    source: citynames, name: "citynames"
+                                }
+                            });
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
+                el.find("#ContractType").on("change", function (event) { self.selectedContractChanged(); });
+                $('input[name=SelectedPosition]').typeahead(null, {
+                    source: positions, name: "positions"
+                }).change(function () {
+                    self.contractor.SelectedPosition = $(this).val();
+                    });
+                var switcher = $("input[name=square-switch]");
+                switcher.bootstrapSwitch();
+                switcher.on('switchChange.bootstrapSwitch', function (event, state) {
+                    self.isActive = switcher.is(':checked');
+                }); 
+                
+                
+            }
         })
     </script>
 }

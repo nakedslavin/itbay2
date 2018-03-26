@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Security.Authentication;
 using System.Text;
 
 namespace ITB.Business.Repos
@@ -15,11 +16,20 @@ namespace ITB.Business.Repos
         private MongoClient client;
         private IMongoCollection<T> collection;
 
-        public MongoSession()
+        public MongoSession(string collectionName = null)
         {
-            this.client = new MongoClient();
+            string connectionString =
+  @"mongodb://sa:Letmein1@ds040637.mlab.com:40637/itbay?3t.connection.name=lab-bay&3t.connectTimeout=10000&3t.uriVersion=2&3t.connectionMode=direct&readPreference=primary&3t.socketTimeout=0&3t.databases=itbay";
+            MongoClientSettings settings = MongoClientSettings.FromUrl(
+              new MongoUrl(connectionString)
+            );
+            settings.SslSettings =
+              new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
+
+            this.client = new MongoClient(settings);
+            collectionName = collectionName ?? typeof(T).Name;
             this.collection = client.GetDatabase("itbay")
-                .GetCollection<T>(typeof(T).Name);
+                .GetCollection<T>(collectionName);
         }
 
         /// <summary>
@@ -50,6 +60,19 @@ namespace ITB.Business.Repos
             }
             else
                 collection.InsertOne(item);
+        }
+
+        /// <summary>
+        /// Delete an item from the collection
+        /// </summary>
+        /// <param name="item"></param>
+        public void Delete(T item)
+        {
+            if (typeof(T).IsSubclassOf(typeof(BaseMongoId)))
+            {
+                BaseMongoId id = item as BaseMongoId;
+                collection.DeleteOne(new BsonDocument("_id", ObjectId.Parse(id.Id)));
+            }
         }
     }
 }

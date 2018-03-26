@@ -219,6 +219,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\ContractorController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -230,6 +231,7 @@
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\Skill.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Results\JsonNetResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -237,9 +239,33 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\flat-ui.css" />
+    <Content Include="Content\flat-ui.min.css" />
     <Content Include="Content\high-tech-abstract-wallpaper-30896-31626-hd-wallpapers.jpg" />
+    <Content Include="Content\svg\book.svg" />
+    <Content Include="Content\svg\calendar.svg" />
+    <Content Include="Content\svg\chat.svg" />
+    <Content Include="Content\svg\clipboard.svg" />
+    <Content Include="Content\svg\clocks.svg" />
+    <Content Include="Content\svg\compas.svg" />
+    <Content Include="Content\svg\gift-box.svg" />
+    <Content Include="Content\svg\loop.svg" />
+    <Content Include="Content\svg\mail.svg" />
+    <Content Include="Content\svg\map.svg" />
+    <Content Include="Content\svg\paper-bag.svg" />
+    <Content Include="Content\svg\pencils.svg" />
+    <Content Include="Content\svg\retina.svg" />
+    <Content Include="Content\svg\ribbon.svg" />
+    <Content Include="Content\svg\toilet-paper.svg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons\flat-ui-icons-regular.svg" />
+    <Content Include="fonts\lato\lato-black.svg" />
+    <Content Include="fonts\lato\lato-bold.svg" />
+    <Content Include="fonts\lato\lato-bolditalic.svg" />
+    <Content Include="fonts\lato\lato-italic.svg" />
+    <Content Include="fonts\lato\lato-light.svg" />
+    <Content Include="fonts\lato\lato-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="ApplicationInsights.config">
@@ -253,9 +279,35 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="fonts\glyphicons\flat-ui-icons-regular.eot" />
+    <Content Include="fonts\glyphicons\flat-ui-icons-regular.ttf" />
+    <Content Include="fonts\glyphicons\flat-ui-icons-regular.woff" />
+    <Content Include="fonts\glyphicons\selection.json" />
+    <Content Include="fonts\lato\lato-black.eot" />
+    <Content Include="fonts\lato\lato-black.ttf" />
+    <Content Include="fonts\lato\lato-black.woff" />
+    <Content Include="fonts\lato\lato-bold.eot" />
+    <Content Include="fonts\lato\lato-bold.ttf" />
+    <Content Include="fonts\lato\lato-bold.woff" />
+    <Content Include="fonts\lato\lato-bolditalic.eot" />
+    <Content Include="fonts\lato\lato-bolditalic.ttf" />
+    <Content Include="fonts\lato\lato-bolditalic.woff" />
+    <Content Include="fonts\lato\lato-italic.eot" />
+    <Content Include="fonts\lato\lato-italic.ttf" />
+    <Content Include="fonts\lato\lato-italic.woff" />
+    <Content Include="fonts\lato\lato-light.eot" />
+    <Content Include="fonts\lato\lato-light.ttf" />
+    <Content Include="fonts\lato\lato-light.woff" />
+    <Content Include="fonts\lato\lato-regular.eot" />
+    <Content Include="fonts\lato\lato-regular.ttf" />
+    <Content Include="fonts\lato\lato-regular.woff" />
+    <Content Include="Content\flat-ui.css.map" />
+    <None Include="Properties\PublishProfiles\itbay - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\itbayio - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\flat-ui.js" />
+    <Content Include="Scripts\flat-ui.min.js" />
     <Content Include="Scripts\ITB.js" />
     <Content Include="Scripts\itbay.js" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
@@ -273,6 +325,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\typeahead.bundle.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -311,6 +364,8 @@
     <Content Include="Scripts\jquery-3.2.1.min.map" />
     <Content Include="Views\Client\Index.cshtml" />
     <Content Include="Views\Contractor\Index.cshtml" />
+    <Content Include="Views\Client\Project.cshtml" />
+    <Content Include="Views\Client\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

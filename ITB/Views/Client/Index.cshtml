@@ -1,7 +1,168 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@using ITB.Business
+@model Client
+@{
+    ViewBag.Title = "Client";
 }
 
-@section scripts {
+<div id="app_client" class="row">
+    <div class="col-md-6 top_60">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{{title}}</a></li>
+        </ul>
+        <div class="top_30">
+            <form v-on:submit="submit">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <img src="https://source.unsplash.com/user/erondu/100x100" class="img-rounded img-responsive img-margin-left" />
+                    </div>
+                    <div class="col-xs-9">
+                        <div class="form-group">
+                            <input type="text" name="CompanyName" v-model="client.CompanyName" class="form-control" placeholder="Company Name" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="Email" v-model="client.Email" class="form-control" placeholder="Email" disabled />
+                        </div>
+                        <div class="form-group hidden">
+                            <input type="text" name="UserName" v-model="client.UserName" class="form-control" placeholder="UserName" disabled />
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <input type="text" name="CompanyShortDescription" v-model="client.CompanyShortDescription" class="form-control" placeholder="Short Description" />
+                </div>
+                <div class="form-group">
+                    <textarea name="CompanyLongDescription" v-model="client.CompanyLongDescription" class="form-control" rows="4" placeholder="Long Description"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="CompanyCategory" v-model="client.CompanyCategory" class="form-control" placeholder="Company Category" />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="CompanyLocation" v-model="client.CompanyLocation" class="form-control" style="position:inherit!important" placeholder="Company Location" />
+                </div>
+                <hr />
+                <div class="form-group">
+                    <input type="text" name="GithubUrl" v-model="client.GithubUrl" class="form-control" placeholder="GithubUrl" />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="WebsiteUrl" v-model="client.WebsiteUrl" class="form-control" placeholder="WebsiteUrl" />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="LinkedinUrl" v-model="client.LinkedinUrl" class="form-control" placeholder="LinkedinUrl" />
+                </div>
+                <hr />
+                <div class="form-group">
+                    <button id="update" type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6 top_60">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{{subTitle}}</a></li>
+        </ul>
+        <div class="top_30">
+            <div class="form-group">
+                <input type="text" name="FirstName" v-model="client.FirstName" class="form-control" placeholder="First Name" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="LastName" v-model="client.LastName" class="form-control" placeholder="Last Name" />
+            </div>
+            <div class="form-group" style="position:inherit!important">
+                <input type="text" name="JobTitle" v-model="client.JobTitle" class="form-control" placeholder="Your Job Title" />
+            </div>
+        </div>
 
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">Latest Projects</a></li>
+        </ul>
+        <div>
+            <div class="panel-body">
+                <div v-for="proj in projects">
+                    <a href="/Client/Project">{{proj.JobTitle}}</a><br />
+                    <small>{{proj.Description}}</small>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">Latest Positions</a></li>
+        </ul>
+        <div class="top_30">
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var clientApp = new Vue({
+            el: '#app_client',
+            data: {
+                dataGetURL: "/Client/Get",
+                dataPostURL: "/Client/Post",
+                dataGetItemsURL: "/Client/ProjectGet",
+                title: "Company",
+                subTitle: "About You",
+                client: {
+                },
+                projects: []
+            },
+            created() {
+                var self = this;
+                $.getJSON(this.dataGetURL, function (data) {
+                    self.client = data;
+                });
+                $.getJSON(this.dataGetItemsURL, function (data) {
+                    self.projects = data;
+                });
+            },
+            methods: {
+                submit(event) {
+                    if (event !== undefined)
+                        event.preventDefault();
+                    var self = this;
+                    var button = $(this.$el).find("button#update");
+                    button.text("Saving");
+                    $.post(this.dataPostURL, this.client).fail(function () {
+                        $(self.$el).find("form").validate();
+                    }).always(function () {
+                        button.text("Update");
+                    });
+                },
+            },
+            mounted() {
+                var self = this;
+                var el = $(this.$el);
+
+                var positions = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: {
+                        url: '/Service/Positions'
+                    }
+                });
+                positions.initialize();
+                var citynames = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: {
+                        url: '/Service/Locations'
+                    }
+                });
+                citynames.initialize();
+                $('input[name=JobTitle]').typeahead(null, {
+                    source: positions, name: "positions"
+                }).change(function () {
+                    self.client.JobTitle = $(this).val();
+                });
+                $('input[name=CompanyLocation]').typeahead(null, {
+                    source: citynames, name: "citynames"
+                }).change(function () {
+                    self.client.CompanyLocation = $(this).val();
+                });
+            }
+        })
+    </script>
 }

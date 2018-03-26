@@ -18,6 +18,12 @@ namespace ITB.Controllers
         {
             session = new MongoSession<Contractor>();
         }
+
+        public ActionResult Dashboard() {
+
+            return View();
+        }
+
         // GET: Contractor
         public ActionResult Index()
         {
@@ -25,13 +31,7 @@ namespace ITB.Controllers
                 UserName = User.Identity.Name,
                 Email = User.Identity.Name
             };
-            //currentContractor.SelectedCities.Add("Vladimir");
-            //if (currentUser == null) {
-            //    var user = await UserManager.FindByNameAsync(User.Identity.Name);
-                
-            //}
             
-
             return View(currentContractor);
         }
 
@@ -44,7 +44,6 @@ namespace ITB.Controllers
                 UserName = User.Identity.Name,
                 Email = User.Identity.Name
             };
-            //currentContractor.SelectedCities.Add("Vladimir");
             return Json(currentContractor, "application/json", JsonRequestBehavior.AllowGet);
         }
         // POST: Contractor

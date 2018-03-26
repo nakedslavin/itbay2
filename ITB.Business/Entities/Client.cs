@@ -11,7 +11,6 @@ namespace ITB.Business
 
         // Client
         public string CompanyName { get; set; }
-        public byte[] CompanyLogo { get; set; }
 
         public string CompanyShortDescription { get; set; }
         public string CompanyLongDescription { get; set; }

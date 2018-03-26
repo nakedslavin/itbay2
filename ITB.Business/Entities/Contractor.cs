@@ -6,7 +6,7 @@ namespace ITB.Business
 {
     public class Contractor : BaseEntity
     {
-        public string SelectedPositionType { get; set; }
+        public string SelectedPosition { get; set; }
         //public Dictionary<string, int> PrimarySkillTerms { get; set; } = new Dictionary<string, int>();
         //public Dictionary<string, int> SecondarySkillTerms { get; set; } = new Dictionary<string, int>();
         public List<string> PrimarySkills { get; set; } = new List<string>();

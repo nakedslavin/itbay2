@@ -1,0 +1,185 @@
+﻿@using ITB.Business
+@model List<Project>
+@{
+    ViewBag.Title = "Client";
+}
+
+<div id="app_projects" class="row">
+    <div class="col-md-3 top_60">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{{title}}</a></li>
+        </ul>
+        <div class="top_30 ">
+            <div v-for="proj in projects" class="border-bottom-line">
+                <a :href="proj.Id"><img src="~/Content/svg/mail.svg" alt="Mail" class="icon-margin-right" v-if="getTimeDiff(proj.Timestamp) < 1"><strong>{{proj.JobTitle}}</strong></a>
+                <span class="pull-right">
+                    <a href="#" v-on:click="editProj(proj)"><span class="fui-new"></span></a>
+                    <a href="#" v-on:click="removeProj(proj)"><span class="fui-cross"></span></a>
+                </span>
+                <br />
+                <small>{{proj.Description}}</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 top_60">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{{subTitle}}</a></li>
+        </ul>
+        <div class="top_30">
+            <form v-on:submit="submit">
+                <div class="form-group">
+                    <input type="text" name="JobTitle" v-model="project.JobTitle" class="form-control" style="position:inherit!important" placeholder="Job Title" />
+                </div>
+                <div class="form-group">
+                    <textarea name="Description" v-model="project.Description" class="form-control" rows="4" placeholder="Description"></textarea>
+                </div>
+                <div class="form-group">
+                    <input class="tagsinput" v-model="project.Skills" data-role="tagsinput" data-set="skills"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="Location" v-model="project.Location" class="form-control" style="position:inherit!important" placeholder="Location" />
+                </div>
+                <hr />
+                <div class="form-group">
+                    <input type="text" name="Price" v-model="project.Price" class="form-control" placeholder="Price" />
+                </div>
+                <div class="form-group">
+                    @Html.DropDownList("ContractType", new SelectList(Enum.GetValues(typeof(ContractType))), new { @class = "form-control", placeholder = "Contract Type" })
+                </div>
+                <hr />
+                <div class="form-group">
+                    <button id="update" type="submit" class="btn btn-primary">{{updateBtnText}}</button>
+                    <button id="cancel" type="button" class="btn btn-default" v-on:click="clearProj" v-if="showCancelBtn()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var projectsApp = new Vue({
+            el: '#app_projects',
+            data: {
+                dataGetURL: "/Client/ProjectGet",
+                dataPostURL: "/Client/ProjectPost",
+                dataDeleteURL: "/Client/ProjectDelete",
+                title: "Your Projects",
+                subTitle: "Create or Update",
+                updateBtnText: "Add a new project",
+                project: {},
+                projects: []
+            },
+            created() {
+                var self = this;
+                $.getJSON(this.dataGetURL, function (data) {
+                    self.projects = data;
+                });
+            },
+            methods: {
+                submit(event) {
+                    if (event !== undefined)
+                        event.preventDefault();
+                    var self = this;
+                    this.updateBtnText = "Saving";
+                    $.post(this.dataPostURL, this.project).fail(function () {
+                        $(self.$el).find("form").validate();
+                    }).done(function (data) {
+                        self.updateBtnText = "Add a new project";
+                        self.projects = data;
+                        self.clearProj();
+                    });
+                },
+                editProj(proj) {
+                    this.project = proj;
+                    this.updateBtnText = "Save Changes";
+                },
+                removeProj(proj) {
+                    var self = this;
+                    $.post(this.dataDeleteURL, proj).done(function () {
+                        self.projects = $.grep(self.projects, function (value) {
+                            return value.Id != proj.Id;
+                        });
+                    });
+                },
+                clearProj() {
+                    this.project = {};
+                    this.updateBtnText = "Add a new project"
+                },
+                showCancelBtn() {
+                    return this.project.Id != null;
+                },
+                tagsChanged() {
+                    var self = this;
+                    var val = $(this.$el).find(".tagsinput").val();
+                    this.project.Skills = val.split(',');
+                },
+                selectedContractChanged() {
+                    var el = $(this.$el);
+                    var selectedContractType = el.find("#ContractType :selected").text();
+                    this.project.ContractType = selectedContractType;
+                    //this.submit();
+                },
+                getTimeDiff(ts) {
+                    var timediff = new Date() - Date.parse(ts);
+                    var hh = Math.floor(timediff / 1000 / 60 / 60);
+                    return hh;
+                }
+            },
+            mounted() {
+                var self = this;
+                var el = $(this.$el);
+                var tags = el.find(".tagsinput");
+                tags.on('itemAdded', function (event) { self.tagsChanged(); });
+                tags.on('itemRemoved', function (event) { self.tagsChanged(); });
+
+                var positions = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: {
+                        url: '/Service/Positions'
+                    }
+                });
+                positions.initialize();
+                var citynames = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: {
+                        url: '/Service/Locations'
+                    }
+                });
+                citynames.initialize();
+                var skills = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: {
+                        url: '/Service/Skills'
+                    }
+                });
+                skills.initialize();
+                $('input[name=JobTitle]').typeahead(null, {
+                    source: positions, name: "positions"
+                }).change(function () {
+                    self.project.JobTitle = $(this).val();
+                });
+                $('input[name=Location]').typeahead(null, {
+                    source: citynames, name: "citynames"
+                }).change(function () {
+                    self.project.Location = $(this).val();
+                });
+                $(".tagsinput").tagsinput({
+                    typeaheadjs: {
+                        source: skills, name: "skills"
+                    }
+                });
+                el.find("#ContractType").on("change", function (event) { self.selectedContractChanged(); });
+                $('input[name=Location]').typeahead(null, {
+                    source: citynames, name: "citynames"
+                }).change(function () {
+                    self.project.Location = $(this).val();
+                });
+            }
+        })
+    </script>
+}
