@@ -1,7 +1,8 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
-    overflow-x:hidden;
+    overflow-x: hidden;
+    background-color:#edeff1!important;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -26,6 +27,9 @@
 }
 .top_120 {
     margin-top:120px
+}
+.top_200 {
+    margin-top:200px
 }
 .right_20 {
     margin-right: 20px
@@ -116,4 +120,21 @@
 }
 .img-margin-left {
     margin-left: 5px;
+}
+
+.login-box {
+    background-color: #ffffff;
+    opacity:.85;
+    border-radius: 5px;
+    margin-bottom: 220px;
+    margin-top: 35px;
+}
+.content-box {
+    background-color:white; 
+    border-radius:5px; 
+    padding:20px; 
+    opacity:.85;
+}
+.itbay_bg {
+    background-image: url('http://erkconsult.com/content/img/slides/slide3.jpg')
 }

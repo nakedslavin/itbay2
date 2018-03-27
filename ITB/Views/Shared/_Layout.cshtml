@@ -19,7 +19,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("ITBAY", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("( ITBAY )", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -39,15 +39,17 @@
             </div>
         </div>
     </div>
-    <div class="row" style="height:120px; background-image:url('http://erkconsult.com/content/img/slides/slide3.jpg')">
+    <div class="row  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Account" ? "itbay_bg" : "")">
+        <div class="container body-content @(this.ViewContext.RouteData.Values["controller"].ToString() == "Account" ? "" : "content-box")">
+            @RenderBody()
+        </div>
+        
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - SLVN GROUP FOR ITBAY.IO</p>
-        </footer>
-    </div>
+    <footer>
+        <div class="container top_30">
+            <p>&copy; @DateTime.Now.Year - SLVN GROUP.<br />Copyrights belong to the future LTD ITBAY.<br />All rights reserved. For additional information please contact the development team<br />at hello at slvngroup.com</p>
+        </div>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

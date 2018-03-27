@@ -21,7 +21,7 @@ namespace ITB.Controllers
 
         public ActionResult Dashboard() {
 
-            return View();
+            return Content("Dashboard for contractors is under develoment");
         }
 
         // GET: Contractor
