@@ -58,6 +58,7 @@ namespace ITB.Controllers
             return Json(client);
         }
 
+        // PROJECT CRUD
         public ActionResult Project()
         {
             var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();

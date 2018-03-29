@@ -5,43 +5,130 @@
 }
 
 <div id="app_client" class="row">
-    <div class="col-md-6 top_60">
+    <div class="col-md-12 top_60">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">{{title}}</a></li>
         </ul>
         <div class="top_30">
+            <div class="panel panel-success small">
+                <div class="panel-body">
+                    Search for talents was never easier. In the listing you can either contact the contractor or suggest him a project.
+                </div>
+            </div>
             <form v-on:submit="submit">
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <input type="text" name="SearchTerm" class="form-control" placeholder="Search" />
+                            <input class="form-control" name="SearchTerm" type="text" placeholder="Search">
                         </div>
+                        <label class="checkbox pull-left right_20">
+                            <input type="checkbox" value="" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                            Homosexual
+                        </label>
+                        <label class="checkbox pull-left right_20">
+                            <input type="checkbox" value="" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                            Heterosexual
+                        </label>
+                        @*<label class="checkbox pull-left right_20">
+                            <input type="checkbox" value="" data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                            LinkedIn
+                        </label>*@
+                        <input type="submit" value="Search" class="btn btn-success clearfix" />
                     </div>
                 </div>
-                <hr />
-                <div class="form-group">
-                    <button id="update" type="submit" class="btn btn-primary">Search</button>
-                </div>
             </form>
+            <hr />
+            <div class="row">
+                <div v-for="contractor in contractors" class="panel panel-default cards pull-left">
+                    <div class="panel-body">
+                        <h5 class="card-title"><span class="fui-user small"></span>&nbsp;{{contractor.FirstName}} {{contractor.LastName}}</h5>
+                        <p class="card-text">{{contractor.SelectedPosition}}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><small><strong>Skills:</strong> <span class="badge" v-for="skill in contractor.PrimarySkills">{{skill}}&nbsp;</span><span class="badge" v-for="sskill in contractor.SecondarySkills">{{sskill}}&nbsp;</span></small></li>
+                        <li class="list-group-item"><small><strong>Languages:</strong> <span v-for="lang in contractor.Languages">{{lang}}&nbsp;</span></small></li>
+                        <li class="list-group-item"><small><span v-for="city in contractor.SelectedCities">{{city}}&nbsp;</span></small></li>
+                    </ul>
+                    <div class="panel-body">
+                        <button class="btn btn-success btn-sm">Invite</button>
+                        <button class="btn btn-success btn-sm">Message</button>
+                    </div>
+                </div>
+            </div>
+            @*<ul class="list-group">
+                <li v-for="contractor in contractors" class="list-group-item">
+                    <div class="content">
+                        <h5><span class="fui-user small"></span>
+                            {{contractor.FirstName}} {{contractor.LastName}}
+                        </h5>
+                        <small><strong>Skills:</strong> <span class="badge" v-for="skill in contractor.PrimarySkills">{{skill}}&nbsp;</span><span class="badge" v-for="sskill in contractor.SecondarySkills">{{sskill}}&nbsp;</span></small><br />
+                        <small><strong>Languages:</strong> <span v-for="lang in contractor.Languages">{{lang}}&nbsp;</span></small>
+
+                        <hr />
+                        <button class="btn btn-success btn-sm">Invite</button>
+                        <button class="btn btn-success btn-sm">Message</button>
+                    </div>
+                </li>
+            </ul>*@
+            <hr />
+            <div class="row">
+                <div class="photo-list col-xs-12">
+
+                    <img width="80" data-id="539" data-uses="466" alt="leo gill" data-tooltip-content="#info-539" src="https://randomuser.me/api/portraits/men/32.jpg" data-original="https://randomuser.me/api/portraits/men/32.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="557" data-uses="417" alt="Jane Zhu" data-tooltip-content="#info-557" src="https://randomuser.me/api/portraits/women/44.jpg" data-original="https://randomuser.me/api/portraits/women/44.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="503" data-uses="359" alt="renee sims" data-tooltip-content="#info-503" src="https://randomuser.me/api/portraits/women/65.jpg" data-original="https://randomuser.me/api/portraits/women/65.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="541" data-uses="303" alt="iida niskanen" data-tooltip-content="#info-541" src="https://randomuser.me/api/portraits/women/68.jpg" data-original="https://randomuser.me/api/portraits/women/68.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="578" data-uses="198" alt="jonathan nuñez" data-tooltip-content="#info-578" src="https://randomuser.me/api/portraits/men/43.jpg" data-original="https://randomuser.me/api/portraits/men/43.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="539" data-uses="466" alt="leo gill" data-tooltip-content="#info-539" src="https://randomuser.me/api/portraits/men/32.jpg" data-original="https://randomuser.me/api/portraits/men/32.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="557" data-uses="417" alt="Jane Zhu" data-tooltip-content="#info-557" src="https://randomuser.me/api/portraits/women/44.jpg" data-original="https://randomuser.me/api/portraits/women/44.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="503" data-uses="359" alt="renee sims" data-tooltip-content="#info-503" src="https://randomuser.me/api/portraits/women/65.jpg" data-original="https://randomuser.me/api/portraits/women/65.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="541" data-uses="303" alt="iida niskanen" data-tooltip-content="#info-541" src="https://randomuser.me/api/portraits/women/68.jpg" data-original="https://randomuser.me/api/portraits/women/68.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="578" data-uses="198" alt="jonathan nuñez" data-tooltip-content="#info-578" src="https://randomuser.me/api/portraits/men/43.jpg" data-original="https://randomuser.me/api/portraits/men/43.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="539" data-uses="466" alt="leo gill" data-tooltip-content="#info-539" src="https://randomuser.me/api/portraits/men/32.jpg" data-original="https://randomuser.me/api/portraits/men/32.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="557" data-uses="417" alt="Jane Zhu" data-tooltip-content="#info-557" src="https://randomuser.me/api/portraits/women/44.jpg" data-original="https://randomuser.me/api/portraits/women/44.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="503" data-uses="359" alt="renee sims" data-tooltip-content="#info-503" src="https://randomuser.me/api/portraits/women/65.jpg" data-original="https://randomuser.me/api/portraits/women/65.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="541" data-uses="303" alt="iida niskanen" data-tooltip-content="#info-541" src="https://randomuser.me/api/portraits/women/68.jpg" data-original="https://randomuser.me/api/portraits/women/68.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="578" data-uses="198" alt="jonathan nuñez" data-tooltip-content="#info-578" src="https://randomuser.me/api/portraits/men/43.jpg" data-original="https://randomuser.me/api/portraits/men/43.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="539" data-uses="466" alt="leo gill" data-tooltip-content="#info-539" src="https://randomuser.me/api/portraits/men/32.jpg" data-original="https://randomuser.me/api/portraits/men/32.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="557" data-uses="417" alt="Jane Zhu" data-tooltip-content="#info-557" src="https://randomuser.me/api/portraits/women/44.jpg" data-original="https://randomuser.me/api/portraits/women/44.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="503" data-uses="359" alt="renee sims" data-tooltip-content="#info-503" src="https://randomuser.me/api/portraits/women/65.jpg" data-original="https://randomuser.me/api/portraits/women/65.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="541" data-uses="303" alt="iida niskanen" data-tooltip-content="#info-541" src="https://randomuser.me/api/portraits/women/68.jpg" data-original="https://randomuser.me/api/portraits/women/68.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="578" data-uses="198" alt="jonathan nuñez" data-tooltip-content="#info-578" src="https://randomuser.me/api/portraits/men/43.jpg" data-original="https://randomuser.me/api/portraits/men/43.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="539" data-uses="466" alt="leo gill" data-tooltip-content="#info-539" src="https://randomuser.me/api/portraits/men/32.jpg" data-original="https://randomuser.me/api/portraits/men/32.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="557" data-uses="417" alt="Jane Zhu" data-tooltip-content="#info-557" src="https://randomuser.me/api/portraits/women/44.jpg" data-original="https://randomuser.me/api/portraits/women/44.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="503" data-uses="359" alt="renee sims" data-tooltip-content="#info-503" src="https://randomuser.me/api/portraits/women/65.jpg" data-original="https://randomuser.me/api/portraits/women/65.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="541" data-uses="303" alt="iida niskanen" data-tooltip-content="#info-541" src="https://randomuser.me/api/portraits/women/68.jpg" data-original="https://randomuser.me/api/portraits/women/68.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="578" data-uses="198" alt="jonathan nuñez" data-tooltip-content="#info-578" src="https://randomuser.me/api/portraits/men/43.jpg" data-original="https://randomuser.me/api/portraits/men/43.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+                    <img width="80" data-id="578" data-uses="198" alt="jonathan nuñez" data-tooltip-content="#info-578" src="https://randomuser.me/api/portraits/men/43.jpg" data-original="https://randomuser.me/api/portraits/men/43.jpg" class="lazyload initial tooltipstered loaded" data-was-processed="true">
+
+                </div>
+            </div>
+            
+            <hr />
         </div>
     </div>
-    <div class="col-md-6 top_60">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#">Latest Projects</a></li>
-        </ul>
-        <div>
-            <div class="panel-body">
-                <div v-for="proj in projects">
-                    <a href="/Client/Project">{{proj.JobTitle}}</a><br />
-                    <small>{{proj.Description}}</small>
+    
+    <div class="row top_60">
+        <div class="col-md-6">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#">Our Latest Projects</a></li>
+            </ul>
+            <div>
+                <div class="panel-body">
+                    @*<div v-for="proj in projects">
+                        <a href="/Client/Project">{{proj.JobTitle}}</a><br />
+                        <small>{{proj.Description}}</small>
+                    </div>*@
                 </div>
             </div>
         </div>
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#">Latest Positions</a></li>
-        </ul>
-        <div class="top_30">
+        <div class="col-md-6">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#">Our Latest Positions</a></li>
+            </ul>
+            <div class="top_30">
 
+            </div>
         </div>
     </div>
 
@@ -53,21 +140,18 @@
         var clientApp = new Vue({
             el: '#app_client',
             data: {
-                dataGetURL: "/Client/Get",
-                dataPostURL: "/Client/Post",
-                dataGetItemsURL: "/Client/ProjectGet",
+                dataGetContractorsURL: "/Contractor/Search",
                 title: "Dashboard",
-                client: {
-                },
-                projects: []
+                contractors: {
+                }
             },
             created() {
                 var self = this;
-                $.getJSON(this.dataGetURL, function (data) {
-                    self.client = data;
-                });
-                $.getJSON(this.dataGetItemsURL, function (data) {
-                    self.projects = data;
+                var el = $(this.$el);
+               
+                $.getJSON(this.dataGetContractorsURL, function (data) {
+
+                    self.contractors = data;
                 });
             },
             methods: {
@@ -75,45 +159,22 @@
                     if (event !== undefined)
                         event.preventDefault();
                     var self = this;
-                    var button = $(this.$el).find("button#update");
-                    button.text("Saving");
-                    $.post(this.dataPostURL, this.client).fail(function () {
-                        $(self.$el).find("form").validate();
-                    }).always(function () {
-                        button.text("Update");
+                    var el = $(this.$el);
+                    var term = el.find("input[name=SearchTerm]").val().toLowerCase().trim();
+                    console.log(term);
+                    $.getJSON(this.dataGetContractorsURL, function (data) {
+
+                        self.contractors = data.filter(el =>
+                            el.FirstName.toLowerCase().trim() == term || el.LastName.toLowerCase().trim() == term ||
+                            el.PrimarySkills.filter(ps => ps.toLowerCase().trim() == term).length > 0 ||
+                            el.SecondarySkills.filter(ps => ps.toLowerCase().trim() == term).length > 0 
+                        );
                     });
                 },
             },
             mounted() {
                 var self = this;
                 var el = $(this.$el);
-
-                var positions = new Bloodhound({
-                    datumTokenizer: Bloodhound.tokenizers.whitespace,
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    prefetch: {
-                        url: '/Service/Positions'
-                    }
-                });
-                positions.initialize();
-                var citynames = new Bloodhound({
-                    datumTokenizer: Bloodhound.tokenizers.whitespace,
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    prefetch: {
-                        url: '/Service/Locations'
-                    }
-                });
-                citynames.initialize();
-                $('input[name=JobTitle]').typeahead(null, {
-                    source: positions, name: "positions"
-                }).change(function () {
-                    self.client.JobTitle = $(this).val();
-                });
-                $('input[name=CompanyLocation]').typeahead(null, {
-                    source: citynames, name: "citynames"
-                }).change(function () {
-                    self.client.CompanyLocation = $(this).val();
-                });
             }
         })
     </script>

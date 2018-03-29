@@ -138,3 +138,9 @@
 .itbay_bg {
     background-image: url('http://erkconsult.com/content/img/slides/slide3.jpg')
 }
+.cards {
+    margin: 10px;
+    width: 268px;
+    height: 430px;
+    /* clear: right; */
+}

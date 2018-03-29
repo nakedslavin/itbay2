@@ -52,5 +52,11 @@ namespace ITB.Controllers
             session.Save(contractor);
             return Json(contractor);
         }
+
+        // GET: Contractors
+        public ActionResult Search() {
+            var contractors = session.Get(_ => true);
+            return Json(contractors, JsonRequestBehavior.AllowGet);
+        }
     }
 }
