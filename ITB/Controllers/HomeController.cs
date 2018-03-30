@@ -21,13 +21,22 @@ namespace ITB.Controllers
             
             if (User.IsInRole(EntityRole.Contractor.ToString().ToLower()))
                 return RedirectToAction(nameof(Index), EntityRole.Contractor.ToString());
-            return RedirectToAction(nameof(Index), EntityRole.Client.ToString());
+            if (User.IsInRole(EntityRole.Client.ToString().ToLower()))
+                return RedirectToAction(nameof(Index), EntityRole.Client.ToString());
+            else
+                return RedirectToAction("Login", "Account");
         }
 
         public ActionResult Dashboard() {
+            var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+
             if (User.IsInRole(EntityRole.Contractor.ToString().ToLower()))
                 return RedirectToAction(nameof(Dashboard), EntityRole.Contractor.ToString());
-            return RedirectToAction(nameof(Dashboard), EntityRole.Client.ToString());
+            if (User.IsInRole(EntityRole.Client.ToString().ToLower()))
+                return RedirectToAction(nameof(Dashboard), EntityRole.Client.ToString());
+            else
+                return RedirectToAction("Login", "Account");
         }
 
         public ActionResult About()

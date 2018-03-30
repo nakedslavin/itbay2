@@ -23,7 +23,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Profile", "Index", "Home")</li>
@@ -52,10 +52,64 @@
     </footer>
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    <script src="https://unpkg.com/vue"></script>
+
     <script src="http://designmodo.github.io/Flat-UI/dist/js/flat-ui.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
     <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
     @RenderSection("scripts", required: false)
+
+
+    <!-- Modals -->
+    <!-- inviteModal -->
+    <div class="modal fade" id="inviteModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title pull-left"></h5>
+                    <button type="button" class="close pull-right" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-success panel-body small">
+                        You are going to send an invintation to the selected contractor. Select a project you need his help with.
+                    </div>
+                    <hr />
+                    <select class="form-control select select-primary projects" data-toggle="select">
+                        <option value="0" selected>Choose hero</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary invite">Send an invite</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- messageModal -->
+    <div class="modal fade" id="messageModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title pull-left"></h5>
+                    <button type="button" class="close pull-right" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Recipient:</label>
+                            <input type="text" class="form-control" disabled id="recipient-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary message">Send message</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

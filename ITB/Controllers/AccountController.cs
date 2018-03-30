@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ITB.Models;
 using ITB.Business;
+using ITB.Business.Repos;
 
 namespace ITB.Controllers
 {
@@ -18,15 +19,22 @@ namespace ITB.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        MongoSession<Contractor> sessionContractor;
+        MongoSession<Client> sessionClient;
 
         public AccountController()
         {
+            sessionContractor = new MongoSession<Contractor>();
+            sessionClient = new MongoSession<Client>();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
             UserManager = userManager;
             SignInManager = signInManager;
+
+            sessionContractor = new MongoSession<Contractor>();
+            sessionClient = new MongoSession<Client>();
         }
 
         public ApplicationSignInManager SignInManager
@@ -171,10 +179,16 @@ namespace ITB.Controllers
                     if (passedRoleFromHiddenTxt.Equals(EntityRole.Client.ToString(), StringComparison.CurrentCultureIgnoreCase)) {
                         var clientRole = EntityRole.Client.ToString();
                         UserManager.AddToRole(user.Id, clientRole);
+                        sessionClient.Save(new Client { UserName = user.UserName, Email = user.UserName });
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         return RedirectToAction("Index", clientRole);
                     }
                     var contractorRole = EntityRole.Contractor.ToString();
                     UserManager.AddToRole(user.Id, contractorRole);
+                    sessionContractor.Save(new Contractor { UserName = user.UserName, Email = user.UserName });
+                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     return RedirectToAction("Index", contractorRole);
                 }
                 AddErrors(result);

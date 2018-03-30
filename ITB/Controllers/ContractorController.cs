@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace ITB.Controllers
 {
+    [Authorize(Roles = "contractor")]
     public class ContractorController : BaseController
     {
         MongoSession<Contractor> session;
@@ -27,10 +28,7 @@ namespace ITB.Controllers
         // GET: Contractor
         public ActionResult Index()
         {
-            var currentContractor = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault() ?? new Contractor() {
-                UserName = User.Identity.Name,
-                Email = User.Identity.Name
-            };
+            var currentContractor = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
             
             return View(currentContractor);
         }
@@ -38,12 +36,7 @@ namespace ITB.Controllers
         // GET: Contractor
         public ActionResult Get()
         {
-            var currentContractor = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault() ?? 
-            new Contractor()
-            {
-                UserName = User.Identity.Name,
-                Email = User.Identity.Name
-            };
+            var currentContractor = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
             return Json(currentContractor, "application/json", JsonRequestBehavior.AllowGet);
         }
         // POST: Contractor

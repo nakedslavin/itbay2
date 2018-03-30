@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 
 namespace ITB.Controllers
 {
+    [Authorize(Roles = "client")]
     public class ClientController : BaseController
     {
         MongoSession<Client> session;
@@ -20,11 +21,7 @@ namespace ITB.Controllers
         }
 
         public ActionResult Dashboard() {
-            var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault() ?? new Client()
-            {
-                UserName = User.Identity.Name,
-                Email = User.Identity.Name
-            };
+            var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
 
             return View(currentClient);
         }
@@ -32,22 +29,14 @@ namespace ITB.Controllers
         // GET: Client
         public ActionResult Index()
         {
-            var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault() ?? new Client()
-            {
-                UserName = User.Identity.Name,
-                Email = User.Identity.Name
-            };
+            var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
 
             return View(currentClient);
         }
         // GET: Client
         public ActionResult Get()
         {
-            var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault() ?? new Client()
-            {
-                UserName = User.Identity.Name,
-                Email = User.Identity.Name
-            };
+            var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
 
             return Json(currentClient, "application/json", JsonRequestBehavior.AllowGet);
         }

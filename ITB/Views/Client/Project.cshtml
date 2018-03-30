@@ -11,7 +11,7 @@
         </ul>
         <div class="top_30 ">
             <div v-for="proj in projects" class="border-bottom-line">
-                <a :href="proj.Id"><img src="~/Content/svg/mail.svg" alt="Mail" class="icon-margin-right" v-if="getTimeDiff(proj.Timestamp) < 1"><strong>{{proj.JobTitle}}</strong></a>
+                <a v-on:click="editProj(proj)"><img src="~/Content/svg/mail.svg" alt="Mail" class="icon-margin-right" v-if="getTimeDiff(proj.Timestamp) < 1"><strong>{{proj.JobTitle}}</strong></a>
                 <span class="pull-right">
                     <a href="#" v-on:click="editProj(proj)"><span class="fui-new"></span></a>
                     <a href="#" v-on:click="removeProj(proj)"><span class="fui-cross"></span></a>
@@ -23,35 +23,44 @@
     </div>
     <div class="col-md-9 top_60">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#">{{subTitle}}</a></li>
+            <li class="active"><a data-toggle="tab" href="#edit">{{subTitle}}</a></li>
+            <li><a data-toggle="tab" href="#contractors">Invited Contractors</a></li>
         </ul>
-        <div class="top_30">
-            <form v-on:submit="submit">
-                <div class="form-group">
-                    <input type="text" name="JobTitle" v-model="project.JobTitle" class="form-control" style="position:inherit!important" placeholder="Job Title" />
+        <div class="top_30 tab-content">
+            <div class="tab-pane active" id="edit">
+                <form v-on:submit="submit">
+                    <div class="form-group">
+                        <input type="text" name="JobTitle" v-model="project.JobTitle" class="form-control" style="position:inherit!important" placeholder="Job Title" />
+                    </div>
+                    <div class="form-group">
+                        <textarea name="Description" v-model="project.Description" class="form-control" rows="4" placeholder="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input class="tagsinput" v-model="project.Skills" data-role="tagsinput" data-set="skills" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="Location" v-model="project.Location" class="form-control" style="position:inherit!important" placeholder="Location" />
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <input type="text" name="Price" v-model="project.Price" class="form-control" placeholder="Price" />
+                    </div>
+                    <div class="form-group">
+                        @Html.DropDownList("ContractType", new SelectList(Enum.GetValues(typeof(ContractType))), new { @class = "form-control", placeholder = "Contract Type" })
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <button id="update" type="submit" class="btn btn-primary">{{updateBtnText}}</button>
+                        <button id="cancel" type="button" class="btn btn-default" v-on:click="clearProj" v-if="showCancelBtn()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane" id="contractors">
+                <div class="panel panel-body panel-success small">
+                    You can search and invite more contractors at <a href="/Home/Dashboard">your Dashboard</a>.
                 </div>
-                <div class="form-group">
-                    <textarea name="Description" v-model="project.Description" class="form-control" rows="4" placeholder="Description"></textarea>
-                </div>
-                <div class="form-group">
-                    <input class="tagsinput" v-model="project.Skills" data-role="tagsinput" data-set="skills"/>
-                </div>
-                <div class="form-group">
-                    <input type="text" name="Location" v-model="project.Location" class="form-control" style="position:inherit!important" placeholder="Location" />
-                </div>
-                <hr />
-                <div class="form-group">
-                    <input type="text" name="Price" v-model="project.Price" class="form-control" placeholder="Price" />
-                </div>
-                <div class="form-group">
-                    @Html.DropDownList("ContractType", new SelectList(Enum.GetValues(typeof(ContractType))), new { @class = "form-control", placeholder = "Contract Type" })
-                </div>
-                <hr />
-                <div class="form-group">
-                    <button id="update" type="submit" class="btn btn-primary">{{updateBtnText}}</button>
-                    <button id="cancel" type="button" class="btn btn-default" v-on:click="clearProj" v-if="showCancelBtn()">Cancel</button>
-                </div>
-            </form>
+
+            </div>
         </div>
     </div>
 </div>

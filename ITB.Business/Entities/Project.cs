@@ -9,6 +9,10 @@ namespace ITB.Business
         // Client User Name
         public string UserName { get; set; }
 
+        public List<string> InvitedContractors { get; set; } = new List<string>();
+        public List<string> AppliedContractors { get; set; } = new List<string>();
+        public string SelectedContractor;
+
         public string JobTitle { get; set; }
         public string Skills { get; set; }
         public string Location { get; set; }
