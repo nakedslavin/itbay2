@@ -367,6 +367,7 @@
     <Content Include="Views\Contractor\Index.cshtml" />
     <Content Include="Views\Client\Project.cshtml" />
     <Content Include="Views\Client\Dashboard.cshtml" />
+    <Content Include="Views\Contractor\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

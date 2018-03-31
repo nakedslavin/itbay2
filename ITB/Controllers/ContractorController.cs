@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace ITB.Controllers
 {
-    [Authorize(Roles = "contractor")]
+    [Authorize]
     public class ContractorController : BaseController
     {
         MongoSession<Contractor> session;
@@ -20,12 +20,16 @@ namespace ITB.Controllers
             session = new MongoSession<Contractor>();
         }
 
-        public ActionResult Dashboard() {
+        [Authorize(Roles = "contractor")]
+        public ActionResult Dashboard()
+        {
+            var currentContractor = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
 
-            return Content("Dashboard for contractors is under develoment");
+            return View(currentContractor);
         }
 
         // GET: Contractor
+        [Authorize(Roles = "contractor")]
         public ActionResult Index()
         {
             var currentContractor = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
@@ -34,12 +38,14 @@ namespace ITB.Controllers
         }
 
         // GET: Contractor
+        [Authorize(Roles = "contractor")]
         public ActionResult Get()
         {
             var currentContractor = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
             return Json(currentContractor, "application/json", JsonRequestBehavior.AllowGet);
         }
         // POST: Contractor
+        [Authorize(Roles = "contractor")]
         public ActionResult Post(Contractor contractor)
         {
             session.Save(contractor);
@@ -47,6 +53,7 @@ namespace ITB.Controllers
         }
 
         // GET: Contractors
+        [Authorize(Roles ="contractor,client")]
         public ActionResult Search() {
             var contractors = session.Get(_ => true);
             return Json(contractors, JsonRequestBehavior.AllowGet);

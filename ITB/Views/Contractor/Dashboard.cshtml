@@ -1,0 +1,120 @@
+﻿@using ITB.Business
+@model Contractor
+@{
+    ViewBag.Title = "Contractor";
+}
+
+<div id="app_dashboard" class="row">
+    <div class="col-md-12 top_60">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{{title}}</a></li>
+        </ul>
+        <div class="top_30">
+            <panel-card message="Search for projects was never easier. In the listing you can either contact the client or directly apply to it. Good luck!"></panel-card>
+            <form v-on:submit="submit">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <input class="form-control" name="SearchTerm" type="text" placeholder="Search">
+                        </div>
+                        <label class="checkbox pull-left right_20">
+                            <input type="checkbox" value="" checked data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                            Projects
+                        </label>
+                        <label class="checkbox pull-left right_20">
+                            <input type="checkbox" value="" checked data-toggle="checkbox" class="custom-checkbox"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
+                            Positions
+                        </label>
+                        <input type="submit" value="Search" class="btn btn-success clearfix" />
+                    </div>
+                </div>
+            </form>
+            <hr />
+            <div class="row">
+                <ul class="list-group">
+                    <project-card v-for="project in projects" :project="project" :key="project.Id"></project-card>
+                </ul>
+            </div>
+            <hr />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        Vue.component('project-card', {
+            data: function () {
+                return {
+                }
+            },
+            props: ['project'],
+            template: '<li class="list-group-item cards pull-left">'+
+            '<small><strong>{{project.JobTitle}}</strong>, {{project.Location}}</small><br/>' +
+            '<small>{{project.Description | truncate(160) }}</small><br/>' +
+            '<small><strong>Skills:</strong> <span class="badge" v-for="skill in project.Skills">{{skill}}&nbsp;</span></small><br/>' +
+            '<small><strong>Price: {{project.Price || "N/A"}}</strong></small>' +
+            '<hr/><button class="btn btn-success btn-sm invite" type="button" data-toggle="modal" data-target="#inviteModal">Invite</button>&nbsp;' +
+            '<button class="btn btn-default btn-sm message" type="button" data-toggle="modal" data-target="#messageModal">Message</button>' +
+            '</li>'
+        })
+        var clientApp = new Vue({
+            el: '#app_dashboard',
+            data: {
+                dataGetProjectsURL: "/Client/ProjectSearch",
+                title: "Dashboard",
+                projects: [],
+                currentClient: {}
+            },
+            created() {
+                var self = this;
+                var el = $(this.$el);
+                $.getJSON(this.dataGetProjectsURL, function (data) {
+                    self.projects = data;
+                });
+
+                //$('body').on('show.bs.modal', function (event) {
+                //    var button = $(event.relatedTarget) // Button that triggered the modal
+                //    var recipient = button.data('info')
+                //    var firstName = button.data('first-name')
+                //    var lastName = button.data('last-name')
+                //    var modal = $(this)
+                //    modal.find('.modal-title').text('Contact ' + firstName + ' ' + lastName)
+                //    modal.find('.modal-body input').val(recipient)
+
+                //    var select = modal.find('.projects')
+                //    select.html('');
+                //    for (var j in self.projects) {
+                //        select.append("<option value='" + self.projects[j].Id + "'>" + self.projects[j].JobTitle + "</option>");
+                //    }
+
+                //    // set axns
+                //    var invite = modal.find('.invite');
+                //    var message = modal.find('.message');
+                //});
+            },
+            methods: {
+                submit(event) {
+                    if (event !== undefined)
+                        event.preventDefault();
+                    var self = this;
+                    var el = $(this.$el);
+                    var term = el.find("input[name=SearchTerm]").val().toLowerCase().trim();
+                    console.log(term);
+                    $.getJSON(this.dataGetContractorsURL, function (data) {
+
+                        self.contractors = data.filter(el =>
+                            el.FirstName.toLowerCase().trim() == term || el.LastName.toLowerCase().trim() == term ||
+                            el.PrimarySkills.filter(ps => ps.toLowerCase().trim() == term).length > 0 ||
+                            el.SecondarySkills.filter(ps => ps.toLowerCase().trim() == term).length > 0
+                        );
+                    });
+                },
+            },
+            mounted() {
+                var self = this;
+                var el = $(this.$el);
+            }
+        });
+    </script>
+}

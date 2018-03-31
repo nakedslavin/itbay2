@@ -9,7 +9,7 @@ using System.Web.Script.Serialization;
 
 namespace ITB.Controllers
 {
-    [Authorize(Roles = "client")]
+    [Authorize]
     public class ClientController : BaseController
     {
         MongoSession<Client> session;
@@ -20,6 +20,7 @@ namespace ITB.Controllers
             projSession = new MongoSession<Project>();
         }
 
+        [Authorize(Roles = "client")]
         public ActionResult Dashboard() {
             var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
 
@@ -27,6 +28,7 @@ namespace ITB.Controllers
         }
 
         // GET: Client
+        [Authorize(Roles = "client")]
         public ActionResult Index()
         {
             var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
@@ -34,6 +36,7 @@ namespace ITB.Controllers
             return View(currentClient);
         }
         // GET: Client
+        [Authorize(Roles = "client")]
         public ActionResult Get()
         {
             var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
@@ -41,6 +44,7 @@ namespace ITB.Controllers
             return Json(currentClient, "application/json", JsonRequestBehavior.AllowGet);
         }
         // POST: Client
+        [Authorize(Roles = "client")]
         public ActionResult Post(Client client)
         {
             session.Save(client);
@@ -48,6 +52,7 @@ namespace ITB.Controllers
         }
 
         // PROJECT CRUD
+        [Authorize(Roles = "client")]
         public ActionResult Project()
         {
             var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
@@ -55,6 +60,7 @@ namespace ITB.Controllers
 
             return View(currentProjects);
         }
+        [Authorize(Roles = "client")]
         public ActionResult ProjectGet()
         {
             var currentClient = session.Get(_ => _.UserName == User.Identity.Name).SingleOrDefault();
@@ -62,6 +68,14 @@ namespace ITB.Controllers
 
             return Json(currentProjects, JsonRequestBehavior.AllowGet);
         }
+        [Authorize(Roles = "client,contractor")]
+        public ActionResult ProjectSearch()
+        {
+            var currentProjects = projSession.Get(_ => true).OrderByDescending(x => x.Id).ToList();
+
+            return Json(currentProjects, JsonRequestBehavior.AllowGet);
+        }
+        [Authorize(Roles = "client")]
         public ActionResult ProjectPost(Project project)
         {
             if (project.Id == null) {
@@ -73,6 +87,7 @@ namespace ITB.Controllers
             var currentProjects = projSession.Get(_ => _.UserName == User.Identity.Name).OrderByDescending(x => x.Id).ToList();
             return Json(currentProjects, JsonRequestBehavior.AllowGet);
         }
+        [Authorize(Roles = "client")]
         public ActionResult ProjectDelete(Project project)
         {
             projSession.Delete(project);

@@ -56,6 +56,22 @@
     <script src="http://designmodo.github.io/Flat-UI/dist/js/flat-ui.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
     <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+    <script>
+        //credit to Bill Criswell for this filter
+        Vue.filter('truncate', function (text, stop, clamp) {
+            return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '')
+        })
+        Vue.component('panel-card', {
+            data: function () {
+                return {
+                }
+            },
+            props: ['message'],
+            template: '<div class="panel panel-success small">'+
+                '<div class="panel-body">{{message}}</div>'+
+            '</div>'
+        })
+    </script>
     @RenderSection("scripts", required: false)
 
 
